@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>huntHouse</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+      import zim from "https://zimjs.org/cdn/015/zim_game";
+      const assets = [
+        "girlWorry.png",
+        "livingRoom.png",
+        "lava1.png",
+        "lava2.png",
+        "lava3.png",
+        "m1.png",
+        "m2.png",
+        "m3.png",
+        "m4.png",
+        "m5.png",
+        "m6.png",
+        "heart.png",
+        "Layer 1.png",
+        "Layer 2.png",
+        "bgp.png",
+        "Layer 3.png",
+        "Layer 4.png",
+        "Layer 5.png",
+        "heart.png",
+        "wardrobe.png",
+        "underbed.png",
+        "bgp3.png",
+        "https://fonts.googleapis.com/css2?family=Tomorrow&display=swap",
+        'https://fonts.googleapis.com/css2?family=Creepster&display=swap',
+
+      ];
+
+      
+      const path = "assets/";
+
+      // See Docs under Frame for FIT, FILL, FULL, and TAG
+      new Frame(FIT, 1024, 768, darker, darker, ready, assets, path);
+      function ready() {
+
+  
+
+        let bgp = new Pic("bgp.png", W).center().centerReg();
+        let girlWorry = new Pic("girlWorry.png").sca(0.35).center().loc(320, 220);
+        const label = new Label({
+            text: "THE HAUNTED HOUSE",
+            size: 120,
+            color: red,
+            font: "creepster",
+          }).pos(0, 100, CENTER, TOP)
+
+
+        bgp.animate({
+                props: { scale: 1.2 },
+                time: 1,
+              });
+
+        const labels = new Label({
+            text: "Continue",
+            size: 30,
+            color: darker,
+            font: "creepster",
+        }).centerReg().center();
+
+        const level3 = new Button({
+            label: labels,
+            style: "creepster",
+            color: red,
+            width: 150,
+            backgroundColor: darker,
+            rollBackgroundColor: "brown",
+            corner: 25,
+            borderColor: white,
+            borderWidth: 2,
+        }).pos(0, 80, CENTER, BOTTOM);
+        level3.on("click", () => {
+            zgo("lv1.html");
+        });
+
+
+      } // end ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+
+  <body></body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>huntHouse</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+      import zim from "https://zimjs.org/cdn/015/zim_game";
+      const assets = [
+        "girlWorry.png",
+        "livingRoom.png",
+        "lava1.png",
+        "lava2.png",
+        "lava3.png",
+        "m1.png",
+        "m2.png",
+        "m3.png",
+        "m4.png",
+        "m5.png",
+        "m6.png",
+        "heart.png",
+        "bgp.png",
+        "bgp2.png",
+        "bgp3.png",
+        // "audio.mp3",
+        "https://fonts.googleapis.com/css2?family=Tomorrow&display=swap",
+      ];
+      const path = "assets/";
+
+      // See Docs under Frame for FIT, FILL, FULL, and TAG
+      new Frame(FIT, 1024, 768, dark, black, ready, assets, path);
+      function ready() {
+        new Pic("bgp.png", W).center();
+        const data = getQueryString();
+        zog(data.restart);
+        let mNumber = 6; //marshmallows number fetch frm level 1
+        if (localStorage.marshmallows) {
+          mNumber = localStorage.marshmallows;
+        }
+        //lava
+        let lavaContainer = new Container(W, H).sca(0.5).centerReg();
+        let livingroom = new Pic("livingRoom.png").center(lavaContainer);
+        new Pic("lava2.png")
+          .centerReg(lavaContainer)
+          .centerReg(lavaContainer)
+          .wiggle("alpha", 0.8, 0.1, 0.3, 0.5, 1);
+
+        new Pic("lava1.png")
+          .centerReg(lavaContainer)
+          .wiggle("alpha", 0.8, 0.1, 0.3, 0.5, 1);
+
+        new Pic("lava3.png")
+          .centerReg(lavaContainer)
+          .wiggle("alpha", 0.8, 0.01, 0.3, 0.5, 1);
+
+        //mask of liveing room
+        let livingroomFrame = new Rectangle(
+          500,
+          300,
+          null,
+          white,
+          1,
+          20
+        ).centerReg();
+        lavaContainer.setMask(livingroomFrame);
+
+        let shade = new Rectangle(1024, 768, dark).center().alp(0.5);
+        let girlWorry = new Pic("girlWorry.png").sca(0.5).centerReg();
+        //dialog and start
+        let start;
+        let dialog;
+        part1();
+        function part1() {
+          //START button
+          const label = new Label({
+            text: "Help Ida escape",
+            size: 25,
+            color: white,
+            font: "Tomorrow",
+          })
+            .centerReg()
+            .pos(0, 100, CENTER, BOTTOM);
+          start = new Button({
+            label: label,
+            width: 300,
+            height: 50,
+            backgroundColor: darker,
+            rollBackgroundColor: "brown",
+            corner: 25,
+            borderColor: white,
+            borderWidth: 2,
+          });
+          start.on("click", () => {
+            part2();
+            // const sound = new Aud({
+            //   file: "audio.mp3",
+            //   delay: 0.25,
+            //   loop: true,
+            // }).play();
+            S.update();
+          });
+
+          if (data.restart !== "true") {
+            const words = [
+              "Ida reached the living room.",
+              "She sees that the ghosts created a ruckus & spilled boiling hot chocolate lava on the floor. ",
+              "Remember that she had grabbed some marshmallows in her room?",
+              "Maybe she can using marshmallows to traverse the chocolate lava. ",
+              "end "
+
+            ];
+            STYLE = { lineHeight: 35 };
+            dialog = new Dialog({
+              width: 300,
+              height: 200,
+              words: words,
+              dialogType: "rectangle",
+              tailType: "line",
+              fill: false,
+              size: 20,
+              font: "Tomorrow",
+              color: white,
+              backgroundColor: darker,
+              borderColor: white,
+              borderWidth: 1,
+              corner: 70,
+              padding: 50,
+              tailH: RIGHT,
+              tailV: BOTTOM,
+            }).pos(100, 15, LEFT, TOP);
+            dialog.on("change", () => {
+              zogb(dialog.selectedIndex);
+              if (dialog.selectedIndex == 4) {
+                start.center();
+                dialog.removeFrom();
+                S.update();
+              }
+            });
+          } else {
+            start.center();
+          }
+        }
+        let marshmallows;
+        let target;
+        let t1;
+        let t2;
+        let t3;
+        let t4;
+        let t5;
+        let t6;
+        let heartT;
+        let instr;
+        let mDragContainer;
+        let proportion;
+
+        let m = [
+          new Pic("m1.png").reg(CENTER),
+          new Pic("m2.png").reg(CENTER),
+          new Pic("m3.png").reg(CENTER),
+          new Pic("m4.png").reg(CENTER),
+          new Pic("m5.png").reg(CENTER),
+          new Pic("m6.png").reg(CENTER),
+        ];
+
+        //part2(); //call part 2
+
+        function part2() {
+          start.removeFrom();
+          shade.removeFrom();
+          //girlWorry.loc(113, 822).sca(0.75);
+          girlWorry.animate({ props: { alpha: 0 }, time: 0.33 });
+          timeout(0.33, () => {
+            girlWorry
+              .sca(0.75)
+              .loc(113, 822)
+              .animate({
+                props: { alpha: 1 },
+                time: 0.33,
+              });
+            livingroomFrame.animate({ props: { scale: 2 }, time: 1 });
+            lavaContainer.sca(0.75).centerReg();
+            //!! adding this  !!!!
+            //!! end adding this  !!!!
+          });
+
+          //label
+          instr = new Label({
+            text: "Drag marshmallows to the lava",
+            size: 25,
+            color: light,
+            font: "Tomorrow",
+          })
+            .centerReg()
+            .loc(449, 44);
+
+          //heart
+          let heart = new Pic("heart.png").centerReg();
+          heartT = new Tile(heart, 6, 1, 60).resize().sca(0.3).loc(672, 34);
+
+          //marshmallows set up
+          marshmallows = new Tile({
+            obj: m,
+            cols: 6,
+            rows: 1,
+            spacingH: -45,
+          })
+            .resize()
+            .sca(0.6)
+            .loc(650, 12)
+            .place()
+
+            .drag();
+
+          //target object set up
+          target = new Container(W, H).addTo().alp(0);
+          t1 = new Circle(3, red)
+            .centerReg(target)
+            .loc(493, 423)
+            .drag()
+            .place();
+          t2 = new Circle(3, red)
+            .centerReg(target)
+            .loc(482, 453)
+            .drag()
+            .place();
+          t3 = new Circle(3, red)
+            .centerReg(target)
+            .loc(431, 486)
+            .drag()
+            .place();
+          t4 = new Circle(3, red)
+            .centerReg(target)
+            .loc(431, 559)
+            .drag()
+            .place();
+          t5 = new Circle(3, red)
+            .centerReg(target)
+            .loc(478, 627)
+            .drag()
+            .place();
+          t6 = new Circle(3, red)
+            .centerReg(target)
+            .loc(595, 679)
+            .drag()
+            .place();
+          proportion = new Proportion(t1.y, t6.y, 0.6, 2);
+          part3();
+
+          //pressup on marshmallows
+        }
+        //interaction
+
+        mDragContainer = new Container(W, H).addTo().ord(-2);
+        function part3() {
+          // mouse dwn shadow on marshmallows
+          marshmallows.on("mousedown", (e) => {
+            e.target.sha(black.toAlpha(0.4), 5, 5, 0);
+            S.update();
+          });
+          marshmallows.on("pressup", (e) => {
+            const m = e.target;
+            marshmallows.sha(-1);
+            marshmallows.noMouse();
+            const answer = target.loop((circle) => {
+              if (m.hitTestCircles(circle) && !circle.full) {
+                m.loc(circle, null, mDragContainer)
+                  .noMouse()
+                  .sca(proportion.convert(circle.y));
+                circle.full = true;
+
+                marshmallows.mouse();
+                S.update();
+                return "placed";
+              }
+            });
+
+            //!! adding this part for not enough mashmallows !!!!
+            if (
+              marshmallows.numChildren == 0 &&
+              mDragContainer.numChildren < 6
+            ) {
+              m.animate({
+                props: { alpha: 0 },
+                time: 0.2,
+                call: () => {
+                  const labels = new Label({
+                    text: "You don't have enough marshmallows. Click to restart.",
+                    size: 24,
+                    font: "Tomorrow",
+                    color: white,
+                  });
+                  let re = new Button({
+                    label: labels,
+                    width: 700,
+                    backgroundColor: darker,
+                    rollBackgroundColor: "brown",
+                    corner: 25,
+                    borderColor: white,
+                    borderWidth: 1,
+                  }).center();
+                  re.on("click", () => {
+                    zgo("livingRoom.html?restart=true");
+                  });
+                  new Button(10, 10, label2, "CLICK").center().tap(() => {
+                    zgo("bedroom.html?restart=true"); //zgo back to cassy's page
+                  });
+                  marshmallows.mouse();
+                },
+              });
+            }
+            //!! end of adding this part for not enough mashmallows !!!!
+
+            if (answer != "placed") {
+              m.animate({
+                props: { alpha: 0 },
+                time: 0.2,
+                call: () => {
+                  const labels = new Label({
+                    text: "You don't have enough marshmallows. Click to restart.",
+                    size: 24,
+                    font: "Tomorrow",
+                    color: white,
+                  });
+                  let re = new Button({
+                    label: labels,
+                    width: 700,
+                    backgroundColor: darker,
+                    rollBackgroundColor: "brown",
+                    corner: 25,
+                    borderColor: white,
+                    borderWidth: 1,
+                  }).center();
+                  re.on("click", () => {
+                    zgo("livingRoom.html?restart=true");
+                  });
+                  new Button(10, 10, label2, "CLICK").center().tap(() => {
+                    zgo("livingRoom.html?restart=true");
+                  });
+                  marshmallows.mouse();
+                },
+              });
+            }
+            if (
+              marshmallows.numChildren == 0 &&
+              mDragContainer.numChildren == 6
+            ) {
+              timeout(0.5, () => {
+                mDragContainer.animate({
+                  props: { alpha: 0 },
+                  time: 1,
+                });
+                lavaContainer.reg(490, 332).animate({
+                  props: { scale: 3 },
+                  time: 3,
+                });
+                timeout(2.5, () => {
+                  const newIda = new Pic("awakeIda.png")
+                    .alp(0)
+                    .center()
+                    .setMask(livingroomFrame)
+                    .animate({
+                      props: { alpha: 1 },
+                    });
+                  timeout(2, () => {
+                    const finalT = [
+                      "Ida, overcome the nightmare",
+                      "Woke up in her real room.",
+                      "However",
+                      "Did Ida truly wake up?",
+                    ];
+                    loop(finalT, (text, i) => {
+                      new Label({
+                        text: text,
+                        size: 50,
+                        font: "courier",
+                        color: white,
+                        rollColor: red,
+                        bold: true,
+                        italic: true,
+                      })
+                        .loc(W / 2, 600)
+                        .reg(CENTER)
+
+                        .alp(0)
+                        .animate({
+                          props: { alpha: 1 },
+                          wait: i * 3.5,
+                          time: 3,
+                          rewind: true,
+                        });
+                    });
+                  });
+                });
+              });
+              heartT.removeFrom();
+              instr.removeFrom();
+              girlWorry.removeFrom();
+              //final ending
+              //const finalTS = series(finalT);
+            }
+          });
+        }
+      } // end ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+
+  <body></body>
+</html>
