@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>huntHouse</title>
+
+    <!-- zimjs.com - JavaScript Canvas Framework -->
+    <script type="module">
+      import zim from "https://zimjs.org/cdn/015/zim_game";
+      const assets = [
+        "girlWorry.png",
+        "livingRoom.png",
+        "lava1.png",
+        "lava2.png",
+        "lava3.png",
+        "m1.png",
+        "m2.png",
+        "m3.png",
+        "m4.png",
+        "m5.png",
+        "m6.png",
+        "heart.png",
+        "Layer 1.png",
+        "Layer 2.png",
+        "bgp.png",
+        "Layer 3.png",
+        "Layer 4.png",
+        "Layer 5.png",
+        "heart.png",
+        "wardrobe.png",
+        "underbed.png",
+        "bgp3.png",
+        "https://fonts.googleapis.com/css2?family=Tomorrow&display=swap",
+
+      ];
+
+      
+      const path = "assets/";
+
+      // See Docs under Frame for FIT, FILL, FULL, and TAG
+      new Frame(FIT, 1024, 768, darker, darker, ready, assets, path);
+      function ready() {
+
+        // const sound = new Aud({
+        //       file: "audio.mp3",
+        //       delay: 0.25,
+        //       loop: true,
+        //     }).play();
+
+
+        let bgp = new Pic("bgp.png", W).center();
+
+
+        //const heartcont = new Container(320, 50).loc(672, 25);
+        //let heartrect = new Rectangle (320, 50, blue).loc(672, 25);
+        let container = new Container(W, H).sca(0.5).centerReg();
+        let livingroom = new Pic("bedroom.png").center(container)
+        let livingroomFrame = new Rectangle(
+        500,
+        300,
+        null,
+        white,
+        1,
+        20
+        ).centerReg();
+        let mask1 = container.setMask(livingroomFrame);
+        let start;
+        let dialog;
+        
+        const layer1 = new Pic("Layer 1.png").loc(703, 175).alp(0.01).addTo(container);
+
+        //let girlWorry = new Pic("girlWorry.png").sca(0.35).center().loc(320, 350);
+        let girlWorry = new Pic("girlWorry.png").sca(0.5).centerReg();
+
+
+        const words = [
+            "We need to help ida escape the haunted house",
+            "To do that she needs to pass 3 rooms!!",
+            "We need to be smart, precise and calculating to solve all the tasks and save Ida ",
+            "The first room is the bedroom and the goal is to find all the marshmallows there.",
+            "Note: The marshmallows are hidden in places or objects in the room",
+            "Would you find them all and save elda?",
+            "end"
+          ];
+
+          STYLE = { lineHeight: 40 };
+          dialog = new Dialog({
+            width: 320,
+            words: words,
+            dialogType: "rectangle",
+            tailType: "line",
+            fill: false,
+            size: 20,
+            font: "Tomorrow",
+            color: white,
+            backgroundColor: darker,
+            borderColor: white,
+            borderWidth: 1,
+            corner: 70,
+            padding: 50,
+            tailH: RIGHT,
+            tailV: BOTTOM,
+          }).pos(100, 15, LEFT, TOP);
+
+          dialog.on("change", () => {
+            zogb(dialog.selectedIndex);
+            if (dialog.selectedIndex == 6) {
+              start.loc(310, 300);
+              dialog.removeFrom();
+              S.update();
+            }
+          });
+
+          const label = new Label({
+            text: "Find the Marshmallows",
+            size: 22,
+            color: darker,
+            font: "Tomorrow",
+          }).center(start);
+
+          start = new Button({
+            label: label,
+            width: 400,
+            height: 50,
+            backgroundColor: darker,
+            rollBackgroundColor: "brown",
+            color: white,
+            corner: 25,
+            borderColor: white,
+            borderWidth: 2,
+          });
+
+          start.on("click", () => {
+            zgo("bedroom.html")
+          });
+
+      
+      } // end ready
+    </script>
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+  </head>
+
+  <body></body>
+</html>
