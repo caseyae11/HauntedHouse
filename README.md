@@ -1,6 +1,6 @@
 # Haunted House
 
-** Live link to Haunted House game: https://caseyae11.github.io/HauntedHouse/ This Game is only available on larger devices (laptops and desktops).
+**Live link to Haunted House game: https://caseyae11.github.io/HauntedHouse/ This Game is only available on larger devices (laptops and desktops).**
 
 **Haunted House** is an interactive escape room game developed using the ZIM.js framework. Players navigate through a haunted house, solving puzzles and overcoming challenges across multiple levels.
 
