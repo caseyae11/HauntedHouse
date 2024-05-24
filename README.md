@@ -27,7 +27,7 @@ To play Haunted House, clone the repository and open the HTML files in a web bro
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/haunted-house.git
+   git clone https://github.com/caseyae11/haunted-house.git
    ```
 2. Navigate to the cloned directory:
    ```
